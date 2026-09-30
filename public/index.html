@@ -49,10 +49,10 @@
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 16px; display: flex; flex-direction: column; gap: 12px;
   }
-  .head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
-  .name { font-weight: 600; }
+  .head { display: flex; flex-direction: column; gap: 6px; }
+  .name { font-weight: 600; white-space: nowrap; }
   .voice { color: var(--muted); font-size: 13px; }
-  .price { font-size: 14px; font-variant-numeric: tabular-nums; }
+  .price { font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .player {
     min-height: 54px; display: grid; place-items: center;
     background: #efe6d6; border-radius: 8px; color: var(--muted); font-size: 13px;
@@ -125,7 +125,7 @@
   </div>
   <p class="powered">
     Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">TaskFuel</a>.
-    Open it in Replit, add your own key, write your own line.
+    Import the app to your Replit account, add your own TaskFuel key, write your own line.
   </p>
   <p class="hint">Each voice takes a couple of seconds. The prices differ by more than ten times.</p>
 
