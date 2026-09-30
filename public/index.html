@@ -132,8 +132,8 @@
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 16px; display: flex; flex-direction: column; gap: 10px;
   }
-  .more-card p { margin: 0; font-size: 14px; color: var(--muted); }
-  .more-card audio { width: 100%; }
+  .more-card p { margin: 0; font-size: 14px; color: var(--muted); flex: 1; }
+  .more-card .name { white-space: normal; }
   .more-card a { font-size: 14px; font-weight: 600; }
   .more .all { margin: 16px 0 0; font-size: 14px; }
   a { color: inherit; }
@@ -209,22 +209,26 @@
 
   <section class="more">
     <h2>The same key pays for more than voices</h2>
-    <p class="lede">One balance, over 100 providers, paid per call. A few from the same blog post:</p>
+    <p class="lede">
+      One balance, over 100 providers, paid per call. Three more things we had an agent
+      do with it, written up with every prompt and every price:
+    </p>
     <div class="more-grid">
       <div class="more-card">
-        <span class="name">Music</span>
-        <p>Describe a track and two takes come back for one price. About 11 cents.</p>
-        <audio controls preload="none" id="moreMusic"></audio>
+        <span class="name">Let your agent be your video creator</span>
+        <p>A product image turned into a ten-second video clip, with the exact prompts and what each generation cost.</p>
+        <a href="https://taskfuel.ai/blog/let-your-agent-be-your-video-creator/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Read it</a>
       </div>
       <div class="more-card">
-        <span class="name">Sound effects</span>
-        <p>Describe a UI sound in a sentence. About 5 cents.</p>
-        <audio controls preload="none" id="moreSfx"></audio>
+        <span class="name">Your agent can build games. Now it can polish them</span>
+        <p>A plain Snake game given sprites, sound effects and music for $0.74. Play both versions.</p>
+        <a href="https://taskfuel.ai/blog/snake-game-assets-for-ai-agents/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Read it</a>
       </div>
       <div class="more-card">
-        <span class="name">Images</span>
-        <p>One brief, four image models, four prices. From 7 cents an image.</p>
-        <a href="https://replit.com/github.com/taskfuel/one-brief-four-image-models" target="_blank" rel="noopener">Import that template too</a>
+        <span class="name">Let your agent analyze X for you</span>
+        <p>Full X posts, long ones included, for half a cent a search. No X developer account.</p>
+        <a href="https://taskfuel.ai/blog/x-search-for-ai-agents/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Read it</a>
+        <a href="https://replit.com/github.com/taskfuel/one-search-twenty-x-posts" target="_blank" rel="noopener">Or import its Replit template</a>
       </div>
     </div>
     <p class="all">
@@ -277,8 +281,6 @@
     voices = cfg.voices;
     maxChars = cfg.maxChars;
     hasKey = cfg.hasKey;
-    document.getElementById("moreMusic").src = cfg.more.music;
-    document.getElementById("moreSfx").src = cfg.more.sfx;
     syncChars();
 
     // Nothing spent yet, so play what the blog post recorded for the default

@@ -188,11 +188,6 @@ async function handle(req, res) {
         response,
         ceiling,
       })),
-      // More of what the same key pays for, recorded for the same blog post.
-      more: {
-        music: SAMPLE_BASE + "bed-take-1.mp3",
-        sfx: SAMPLE_BASE + "sfx-coin.mp3",
-      },
       maxChars: MAX_CHARS,
       hasKey: Boolean(KEY),
     });

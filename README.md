@@ -137,7 +137,7 @@ balance. Keep the budget low, or make each visitor bring their own key.
   `<whisper>like this</whisper>` in the middle of a line.
 - **Add music or sound effects.** The same balance pays for music (two takes
   for about 11 cents) and sound effects (about 5 cents), which is how the blog
-  post built a whole radio spot. The page plays one of each.
+  post built a whole radio spot.
 - **Find something else entirely.** `GET https://app.taskfuel.ai/v1/discover?q=...`
   searches every provider in the catalog. There are over 100 of them, covering
   search, market data, email, phone calls, images and more.
