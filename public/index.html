@@ -13,6 +13,7 @@
     --card: #fffdf9;
   }
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     margin: 0;
     padding: 48px 24px 80px;
@@ -22,7 +23,8 @@
   }
   main { max-width: 940px; margin: 0 auto; }
   h1 { font-size: 32px; letter-spacing: -0.02em; margin: 0 0 8px; }
-  .sub { color: var(--muted); margin: 0 0 32px; max-width: 60ch; }
+  .sub { color: var(--muted); margin: 0 0 32px; max-width: 62ch; }
+  .sub strong { color: var(--ink); font-weight: 600; }
   .label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
   label { font-weight: 600; font-size: 14px; }
   .chars { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -41,6 +43,8 @@
   button:disabled { opacity: 0.45; cursor: not-allowed; }
   .total { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
   .hint { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
+  .powered { font-size: 14px; margin: 14px 0 0; }
+  .powered a { font-weight: 600; }
   .grid {
     display: grid; gap: 16px; margin-top: 36px;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -49,6 +53,7 @@
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 16px; display: flex; flex-direction: column; gap: 12px;
   }
+  .cell.picked { border: 2px solid var(--ink); padding: 15px; }
   .head { display: flex; flex-direction: column; gap: 6px; }
   .name { font-weight: 600; white-space: nowrap; }
   .voice { color: var(--muted); font-size: 13px; }
@@ -64,42 +69,74 @@
     font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
     border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; color: var(--muted);
   }
+  .pick {
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    border-radius: 8px; padding: 7px 12px; font-size: 13px; font-weight: 600; align-self: flex-start;
+  }
+  .pick:hover { border-color: var(--ink); }
+  .cell.picked .pick { border-color: var(--ink); }
   .sample-note { color: var(--muted); font-size: 13px; margin: 12px 0 0; }
+  .next {
+    margin-top: 20px; background: var(--card); border: 2px solid var(--ink); border-radius: 12px;
+    padding: 14px 18px; display: flex; gap: 12px 16px; align-items: center;
+    justify-content: space-between; flex-wrap: wrap;
+  }
+  .next[hidden] { display: none; }
+  .next p { margin: 0; font-size: 15px; max-width: 60ch; }
+  .next a.go {
+    background: var(--ink); color: var(--cream); border-radius: 10px; padding: 10px 18px;
+    font-weight: 600; text-decoration: none; white-space: nowrap;
+  }
   dialog {
     border: 1px solid var(--line); border-radius: 14px; background: var(--card);
-    color: var(--ink); padding: 28px 30px; max-width: 440px; font: inherit;
+    color: var(--ink); padding: 28px 30px; max-width: 460px; font: inherit;
   }
   dialog::backdrop { background: rgba(28, 26, 23, 0.45); }
   dialog h2 { margin: 0 0 10px; font-size: 19px; letter-spacing: -0.01em; }
-  dialog p { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
-  .handoff {
+  dialog ol { margin: 0 0 20px; padding-left: 20px; color: var(--muted); font-size: 15px; }
+  dialog li + li { margin-top: 6px; }
+  dialog code, .build code {
+    background: #f7f0e4; border: 1px solid var(--line); border-radius: 6px;
+    padding: 1px 6px; font-size: 12px; font-variant-ligatures: none; color: var(--ink);
+  }
+  .build {
     margin-top: 40px; background: var(--card); border: 1px solid var(--line);
-    border-radius: 12px; padding: 18px 20px;
+    border-radius: 12px; padding: 22px 24px; scroll-margin-top: 24px;
   }
-  .handoff-head {
+  .build h2 { font-size: 20px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .build .lede { margin: 0 0 18px; color: var(--muted); font-size: 15px; max-width: 62ch; }
+  .steps { margin: 0 0 16px; padding-left: 20px; font-size: 15px; }
+  .steps li + li { margin-top: 6px; }
+  .prompt-head {
     display: flex; gap: 12px; align-items: baseline; justify-content: space-between;
-    flex-wrap: wrap; margin-bottom: 12px;
+    flex-wrap: wrap; margin-bottom: 10px;
   }
-  .handoff h2 { font-size: 15px; margin: 0; letter-spacing: -0.01em; }
-  .handoff p { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
-  .handoff pre {
+  .prompt-head span { font-size: 13px; color: var(--muted); }
+  .build pre {
     margin: 0; padding: 14px 16px; background: #f7f0e4; border: 1px solid var(--line);
     border-radius: 8px; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
     white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink);
     font-variant-ligatures: none; /* people copy this text; keep it literal */
   }
+  .build .other { margin: 14px 0 0; font-size: 13px; color: var(--muted); }
   .copy {
     background: transparent; color: var(--ink); border: 1px solid var(--ink);
     border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 600;
   }
   .copy.done { border-color: #4f7a52; color: #4f7a52; }
-  .handoff code {
-    background: #f7f0e4; border: 1px solid var(--line); border-radius: 6px;
-    padding: 1px 6px; font-size: 12px; font-variant-ligatures: none;
+  .more { margin-top: 40px; }
+  .more h2 { font-size: 20px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .more .lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; }
+  .more-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .more-card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px; display: flex; flex-direction: column; gap: 10px;
   }
+  .more-card p { margin: 0; font-size: 14px; color: var(--muted); }
+  .more-card audio { width: 100%; }
+  .more-card a { font-size: 14px; font-weight: 600; }
+  .more .all { margin: 16px 0 0; font-size: 14px; }
   a { color: inherit; }
-  .powered { font-size: 14px; margin: 14px 0 0; }
-  .powered a { font-weight: 600; }
   @keyframes pulse { 0%,100% { opacity: 0.45 } 50% { opacity: 0.9 } }
   .working { animation: pulse 1.4s ease-in-out infinite; }
 </style>
@@ -109,8 +146,9 @@
   <h1>One line, three voices, three prices.</h1>
   <p class="sub">
     Type a sentence. Grok, ElevenLabs and Deepgram each read it out loud, and you see
-    what every read actually cost. Under four cents for the set, from one prepaid
-    balance. No provider accounts.
+    what every read actually cost. On your own, that is three provider accounts, three
+    API keys and three bills. <strong>Here it is one TaskFuel key, and under four cents
+    for all three.</strong>
   </p>
 
   <div class="label-row">
@@ -124,10 +162,14 @@
     <span class="total" id="total"></span>
   </div>
   <p class="powered">
-    Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">TaskFuel</a>.
+    Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-powered" target="_blank" rel="noopener">TaskFuel</a>.
     Import the app to your Replit account, add your own TaskFuel key, write your own line.
   </p>
-  <p class="hint">Each voice takes a couple of seconds. The prices differ by more than ten times.</p>
+  <p class="hint">
+    New TaskFuel accounts start with
+    <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-hint" target="_blank" rel="noopener">$5 free</a>,
+    about 130 runs of this app. Each voice takes a couple of seconds.
+  </p>
 
   <div class="grid" id="grid"></div>
   <p class="sample-note" id="sampleNote" hidden>
@@ -135,28 +177,76 @@
     was charged. Press the button to record your own.
   </p>
 
-  <section class="handoff">
-    <div class="handoff-head">
-      <h2>Or skip this page and ask your own agent</h2>
+  <div class="next" id="next" hidden>
+    <p id="nextText"></p>
+    <a class="go" href="#build">Put it in my app</a>
+  </div>
+
+  <section class="build" id="build">
+    <h2>Add a voice to your own Replit app</h2>
+    <p class="lede">
+      Pick the voice you liked above. This prompt tells Replit Agent exactly how to call
+      it, so your app can read text out loud from your own TaskFuel balance.
+    </p>
+    <ol class="steps">
+      <li>
+        Create a TaskFuel account at
+        <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-build" target="_blank" rel="noopener">app.taskfuel.ai</a>.
+        It starts with $5 free. Open <strong>API keys</strong> and create one.
+      </li>
+      <li>Open your own app in Replit and paste this into Replit Agent. Give it the key when it asks.</li>
+    </ol>
+    <div class="prompt-head">
+      <span id="promptFor"></span>
       <button class="copy" id="copy">Copy prompt</button>
     </div>
     <pre id="prompt"></pre>
-    <p>
-      This page is standing in for your agent. Once yours is connected to TaskFuel it
-      makes the same three calls, in whatever you already work in.
-      <br />
-      Not connected yet? Ask your agent:
+    <p class="other">
+      Using another agent, like Claude Code, Codex or Cursor? Ask it:
       <code>Fetch https://app.taskfuel.ai/llms.txt and set taskfuel up for me.</code>
     </p>
   </section>
 
-  <dialog id="keyPrompt">
-    <h2>No API key yet</h2>
-    <p>
-      Replit's Agent asks for it and saves it for you. Get a key at
-      <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">app.taskfuel.ai</a>,
-      where the first $5 is free.
+  <section class="more">
+    <h2>The same key pays for more than voices</h2>
+    <p class="lede">One balance, over 100 providers, paid per call. A few from the same blog post:</p>
+    <div class="more-grid">
+      <div class="more-card">
+        <span class="name">Music</span>
+        <p>Describe a track and two takes come back for one price. About 11 cents.</p>
+        <audio controls preload="none" id="moreMusic"></audio>
+      </div>
+      <div class="more-card">
+        <span class="name">Sound effects</span>
+        <p>Describe a UI sound in a sentence. About 5 cents.</p>
+        <audio controls preload="none" id="moreSfx"></audio>
+      </div>
+      <div class="more-card">
+        <span class="name">Images</span>
+        <p>One brief, four image models, four prices. From 7 cents an image.</p>
+        <a href="https://replit.com/github.com/taskfuel/one-brief-four-image-models" target="_blank" rel="noopener">Import that template too</a>
+      </div>
+    </div>
+    <p class="all">
+      <a href="https://taskfuel.ai/tools/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-tools" target="_blank" rel="noopener">See everything your agent can call</a>:
+      search, market data, email, phone calls and more.
     </p>
+  </section>
+
+  <dialog id="keyPrompt">
+    <h2>No TaskFuel key yet</h2>
+    <ol>
+      <li>
+        Create a free account at
+        <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-dialog" target="_blank" rel="noopener">app.taskfuel.ai</a>.
+        It starts with $5, about 130 runs of this app.
+      </li>
+      <li>Open <strong>API keys</strong> and create one.</li>
+      <li>
+        In Replit, add it as a secret named <code>TASKFUEL_API_KEY</code>, or ask Replit
+        Agent to do it. Then start the app again.
+      </li>
+    </ol>
     <button id="keyPromptClose" autofocus>Got it</button>
   </dialog>
 </main>
@@ -169,11 +259,15 @@
   const totalEl = document.getElementById("total");
   const sampleNote = document.getElementById("sampleNote");
   const keyPrompt = document.getElementById("keyPrompt");
+  const nextEl = document.getElementById("next");
+  const nextText = document.getElementById("nextText");
 
   let voices = [];
   let maxChars = 200;
   let hasKey = true; // assume yes until /api/config says otherwise
   let spent = 0;
+  let picked = "grok";
+  let state = {};
 
   document.getElementById("keyPromptClose").onclick = () => keyPrompt.close();
 
@@ -183,13 +277,15 @@
     voices = cfg.voices;
     maxChars = cfg.maxChars;
     hasKey = cfg.hasKey;
+    document.getElementById("moreMusic").src = cfg.more.music;
+    document.getElementById("moreSfx").src = cfg.more.sfx;
     syncChars();
 
     // Nothing spent yet, so play what the blog post recorded for the default
     // line. A real run replaces it.
-    const state = {};
     for (const v of voices) state[v.id] = { audio: v.sample, cost: v.samplePrice, sample: true };
-    render(state);
+    render();
+    syncPrompt();
     sampleNote.hidden = false;
   });
 
@@ -200,23 +296,22 @@
     go.disabled = n === 0 || n > maxChars;
   }
 
-  function render(state) {
+  function render() {
     grid.innerHTML = "";
     for (const v of voices) {
       const s = state[v.id] || {};
       const cell = document.createElement("div");
-      cell.className = "cell";
+      cell.className = "cell" + (v.id === picked ? " picked" : "");
 
       const head = document.createElement("div");
       head.className = "head";
-      const who = document.createElement("div");
       const name = document.createElement("div");
       name.className = "name";
       name.textContent = v.label;
       const voice = document.createElement("div");
       voice.className = "voice";
       voice.textContent = "voice: " + v.voice;
-      who.append(name, voice);
+      head.append(name, voice);
 
       const price = document.createElement("span");
       price.className = "price";
@@ -228,7 +323,7 @@
       } else if (s.cost != null) {
         price.textContent = usd(s.cost);
       }
-      head.append(who, price);
+      if (price.textContent) head.append(price);
 
       const player = document.createElement("div");
       if (s.audio) {
@@ -252,22 +347,40 @@
         player.textContent = "waiting";
       }
 
-      cell.append(head, player);
+      // Picking a voice rewrites the prompt below, so the one you liked is the
+      // one that ends up in your own app.
+      const pick = document.createElement("button");
+      pick.className = "pick";
+      pick.textContent = v.id === picked ? "In your app prompt" : "Use this voice in my app";
+      pick.onclick = () => { picked = v.id; render(); syncPrompt(); };
+
+      cell.append(head, player, pick);
       grid.append(cell);
     }
   }
 
   const promptEl = document.getElementById("prompt");
+  const promptFor = document.getElementById("promptFor");
   const copyBtn = document.getElementById("copy");
 
-  const promptFor = (line) =>
-    "Using TaskFuel, read this line out loud in three different voices, each from a " +
-    `different text-to-speech provider:\n\n"${line || "..."}"\n\n` +
-    "Save each read as an MP3 so I can compare them, and show me what each one cost.";
+  const buildPrompt = (v) =>
+    `Add a "read aloud" button to this app. It reads text out loud with ${v.label}, voice ${v.voice}, paid for through TaskFuel.\n\n` +
+    "1. Ask me for my TaskFuel API key and store it as the Replit secret TASKFUEL_API_KEY. Use it only on the server, never in browser code.\n" +
+    "2. From a server route, POST https://app.taskfuel.ai/v1/call with the header Authorization: Bearer <TASKFUEL_API_KEY> and this JSON body:\n" +
+    `   { "url": "${v.url}", "method": "POST", "body": ${v.request.replace("LINE", '"<the text>"')}, "maxAmountUsd": ${v.ceiling} }\n` +
+    `3. The response is the provider's own JSON, with ${v.response}. Play it in the browser.\n` +
+    "4. The charge for each call is in the x-taskfuel-cost response header. Show it next to the button.\n\n" +
+    "A call priced above maxAmountUsd is refused with a 403 and costs nothing, so raise it if long texts get refused. " +
+    "Limits and error handling: https://app.taskfuel.ai/building-apps.md";
 
-  const syncPrompt = () => { promptEl.textContent = promptFor(input.value.trim()); };
-  input.addEventListener("input", () => { syncChars(); syncPrompt(); });
-  syncPrompt();
+  function syncPrompt() {
+    const v = voices.find((x) => x.id === picked);
+    if (!v) return;
+    promptEl.textContent = buildPrompt(v);
+    promptFor.textContent = `For ${v.label}. Pick another voice above to change it.`;
+  }
+
+  input.addEventListener("input", syncChars);
 
   copyBtn.onclick = async () => {
     try {
@@ -295,11 +408,12 @@
 
     go.disabled = true;
     sampleNote.hidden = true;
+    nextEl.hidden = true;
     totalEl.className = "total working";
     totalEl.textContent = "recording";
-    const state = {};
+    state = {};
     for (const v of voices) state[v.id] = { working: true };
-    render(state);
+    render();
 
     // All three at once. Each card fills in as its voice lands, and one engine
     // failing leaves the other two alone.
@@ -316,12 +430,19 @@
       } catch (err) {
         state[v.id] = { error: String(err.message || err) };
       }
-      render(state);
+      render();
     }));
 
     const line = Object.values(state).reduce((sum, s) => sum + (s.cost || 0), 0);
     totalEl.className = "total";
     totalEl.textContent = `${usd(line)} for this line · ${usd(spent)} this session`;
+
+    // Right after it works is when "put this in my own app" is worth asking.
+    if (line > 0) {
+      nextText.textContent =
+        `That line cost ${usd(line)} for all three. Pick the voice you liked, and one prompt puts it in your own Replit app.`;
+      nextEl.hidden = false;
+    }
     syncChars();
   });
 

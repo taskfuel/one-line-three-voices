@@ -32,6 +32,10 @@ const VOICES = [
     audio: (data) => data?.data?.data && `data:audio/mpeg;base64,${data.data.data}`,
     sample: "voice-grok.mp3",
     samplePrice: 0.002,
+    // How to call it, for the prompt that puts this voice in someone's own app.
+    request: '{ "text": LINE, "language": "en", "voice_id": "ara" }',
+    response: "base64 MP3 in data.data",
+    ceiling: 0.01,
   },
   {
     id: "elevenlabs",
@@ -44,6 +48,9 @@ const VOICES = [
     audio: (data) => data?.data?.[0]?.url,
     sample: "voice-elevenlabs.mp3",
     samplePrice: 0.012,
+    request: '{ "input": LINE, "model": "elevenlabs/v3", "voice": "george" }',
+    response: "a hosted MP3 URL in data[0].url",
+    ceiling: 0.03,
   },
   {
     id: "deepgram",
@@ -54,6 +61,9 @@ const VOICES = [
     audio: (data) => data?.data?.data && `data:audio/mpeg;base64,${data.data.data}`,
     sample: "voice-deepgram.mp3",
     samplePrice: 0.023,
+    request: '{ "text": LINE, "model": "aura-2-thalia-en" }',
+    response: "base64 MP3 in data.data",
+    ceiling: 0.03,
   },
 ];
 
@@ -167,13 +177,22 @@ async function handle(req, res) {
 
   if (req.method === "GET" && req.url === "/api/config") {
     return json(res, 200, {
-      voices: VOICES.map(({ id, label, voice, sample, samplePrice }) => ({
+      voices: VOICES.map(({ id, label, voice, url, sample, samplePrice, request, response, ceiling }) => ({
         id,
         label,
         voice,
+        url,
         sample: SAMPLE_BASE + sample,
         samplePrice,
+        request,
+        response,
+        ceiling,
       })),
+      // More of what the same key pays for, recorded for the same blog post.
+      more: {
+        music: SAMPLE_BASE + "bed-take-1.mp3",
+        sfx: SAMPLE_BASE + "sfx-coin.mp3",
+      },
       maxChars: MAX_CHARS,
       hasKey: Boolean(KEY),
     });

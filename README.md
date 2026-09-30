@@ -31,8 +31,9 @@ for the blog post, labelled as samples, so you can hear the difference first.
 
 1. **[Open it in Replit](https://replit.com/github.com/taskfuel/one-line-three-voices).**
    That imports this repo into your own account as a runnable copy.
-2. **Get a key** at [app.taskfuel.ai](https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices).
-   The first $5 is on the house, which is well over 100 runs of this app.
+2. **Get a key.** Create an account at [app.taskfuel.ai](https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices),
+   open **API keys** and create one. The first $5 is on the house, which is
+   about 130 runs of this app.
 3. **Give it the key.** It needs a secret named `TASKFUEL_API_KEY`. Replit's
    Agent asks for it and stores it for you, or you can add it yourself in the
    Secrets tool.
@@ -41,22 +42,26 @@ for the blog post, labelled as samples, so you can hear the difference first.
 That is the whole setup. No provider accounts, no per-engine API keys, no
 subscription to cancel.
 
-## Or skip the app
+## Put a voice in your own app
 
-The page is standing in for an agent: it makes the three calls the same way
-yours would. Once your agent is connected to TaskFuel, ask it directly:
+This is the point of the template. Once you have heard the three, pick the one
+you liked on the page, and it writes a prompt for Replit Agent that adds that
+voice to an app of your own, paid from the same TaskFuel balance. For Grok it
+reads:
 
 ```
-Using TaskFuel, read this line out loud in three different voices, each from a
-different text-to-speech provider:
+Add a "read aloud" button to this app. It reads text out loud with Grok, voice ara, paid for through TaskFuel.
 
-"Your agent can already write the copy. Now it can read it out loud, score it,
-and hand you the finished cut."
+1. Ask me for my TaskFuel API key and store it as the Replit secret TASKFUEL_API_KEY. Use it only on the server, never in browser code.
+2. From a server route, POST https://app.taskfuel.ai/v1/call with the header Authorization: Bearer <TASKFUEL_API_KEY> and this JSON body:
+   { "url": "https://grok.mpp.paywithlocus.com/grok/tts", "method": "POST", "body": { "text": "<the text>", "language": "en", "voice_id": "ara" }, "maxAmountUsd": 0.01 }
+3. The response is the provider's own JSON, with base64 MP3 in data.data. Play it in the browser.
+4. The charge for each call is in the x-taskfuel-cost response header. Show it next to the button.
 
-Save each read as an MP3 so I can compare them, and show me what each one cost.
+A call priced above maxAmountUsd is refused with a 403 and costs nothing, so raise it if long texts get refused. Limits and error handling: https://app.taskfuel.ai/building-apps.md
 ```
 
-Not connected yet? Ask your agent:
+Using another agent, like Claude Code, Codex or Cursor? Ask it:
 
 ```
 Fetch https://app.taskfuel.ai/llms.txt and set taskfuel up for me.
@@ -64,9 +69,6 @@ Fetch https://app.taskfuel.ai/llms.txt and set taskfuel up for me.
 
 That page is written for agents and points at the three ways in, so yours picks
 whichever fits how it runs.
-
-The app builds that prompt from whatever you typed and puts a copy button next
-to it, so a line you liked here can move straight into your own agent.
 
 ## How it works
 
@@ -133,8 +135,9 @@ balance. Keep the budget low, or make each visitor bring their own key.
   [`server.js`](server.js).
 - **Direct the read.** Grok reads inline tags: `[pause]`, `[laugh]` and
   `<whisper>like this</whisper>` in the middle of a line.
-- **Add music or sound effects.** The same balance pays for music generation
-  and sound effects, which is how the blog post built a whole radio spot.
+- **Add music or sound effects.** The same balance pays for music (two takes
+  for about 11 cents) and sound effects (about 5 cents), which is how the blog
+  post built a whole radio spot. The page plays one of each.
 - **Find something else entirely.** `GET https://app.taskfuel.ai/v1/discover?q=...`
   searches every provider in the catalog. There are over 100 of them, covering
   search, market data, email, phone calls, images and more.
