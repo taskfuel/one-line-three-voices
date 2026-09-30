@@ -98,7 +98,8 @@
     padding: 1px 6px; font-size: 12px; font-variant-ligatures: none;
   }
   a { color: inherit; }
-  footer { margin-top: 48px; color: var(--muted); font-size: 14px; }
+  .powered { font-size: 14px; margin: 14px 0 0; }
+  .powered a { font-weight: 600; }
   @keyframes pulse { 0%,100% { opacity: 0.45 } 50% { opacity: 0.9 } }
   .working { animation: pulse 1.4s ease-in-out infinite; }
 </style>
@@ -122,6 +123,10 @@
     <button id="go">Read it three ways</button>
     <span class="total" id="total"></span>
   </div>
+  <p class="powered">
+    Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">TaskFuel</a>.
+    Open it in Replit, add your own key, write your own line.
+  </p>
   <p class="hint">Each voice takes a couple of seconds. The prices differ by more than ten times.</p>
 
   <div class="grid" id="grid"></div>
@@ -154,11 +159,6 @@
     </p>
     <button id="keyPromptClose" autofocus>Got it</button>
   </dialog>
-
-  <footer>
-    Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">TaskFuel</a>.
-    Open it in Replit, add your own key, write your own line.
-  </footer>
 </main>
 
 <script>
