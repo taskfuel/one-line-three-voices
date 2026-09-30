@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Voice lineup</title>
+<style>
+  :root {
+    --cream: #f4ebdd;
+    --ink: #1c1a17;
+    --muted: #6b6357;
+    --line: #ddd0bd;
+    --card: #fffdf9;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 48px 24px 80px;
+    background: var(--cream);
+    color: var(--ink);
+    font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  main { max-width: 940px; margin: 0 auto; }
+  h1 { font-size: 32px; letter-spacing: -0.02em; margin: 0 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 32px; max-width: 60ch; }
+  .label-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  label { font-weight: 600; font-size: 14px; }
+  .chars { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .chars.over { color: #9a3412; font-weight: 600; }
+  textarea {
+    width: 100%; min-height: 96px; padding: 14px 16px; resize: vertical;
+    border: 1px solid var(--line); border-radius: 10px; background: var(--card);
+    color: inherit; font: inherit;
+  }
+  textarea:focus { outline: 2px solid #b4835a; outline-offset: 1px; }
+  .row { display: flex; gap: 12px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+  button {
+    background: var(--ink); color: var(--cream); border: 0; border-radius: 10px;
+    padding: 12px 22px; font: inherit; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  .total { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
+  .hint { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
+  .grid {
+    display: grid; gap: 16px; margin-top: 36px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  .cell {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .name { font-weight: 600; }
+  .voice { color: var(--muted); font-size: 13px; }
+  .price { font-size: 14px; font-variant-numeric: tabular-nums; }
+  .player {
+    min-height: 54px; display: grid; place-items: center;
+    background: #efe6d6; border-radius: 8px; color: var(--muted); font-size: 13px;
+    text-align: center; padding: 8px;
+  }
+  .player audio { width: 100%; }
+  .err { color: #9a3412; font-size: 12px; }
+  .tag {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    border: 1px solid var(--line); border-radius: 999px; padding: 2px 8px; color: var(--muted);
+  }
+  .sample-note { color: var(--muted); font-size: 13px; margin: 12px 0 0; }
+  dialog {
+    border: 1px solid var(--line); border-radius: 14px; background: var(--card);
+    color: var(--ink); padding: 28px 30px; max-width: 440px; font: inherit;
+  }
+  dialog::backdrop { background: rgba(28, 26, 23, 0.45); }
+  dialog h2 { margin: 0 0 10px; font-size: 19px; letter-spacing: -0.01em; }
+  dialog p { margin: 0 0 20px; color: var(--muted); font-size: 15px; }
+  .handoff {
+    margin-top: 40px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .handoff-head {
+    display: flex; gap: 12px; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; margin-bottom: 12px;
+  }
+  .handoff h2 { font-size: 15px; margin: 0; letter-spacing: -0.01em; }
+  .handoff p { margin: 12px 0 0; font-size: 13px; color: var(--muted); }
+  .handoff pre {
+    margin: 0; padding: 14px 16px; background: #f7f0e4; border: 1px solid var(--line);
+    border-radius: 8px; font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ink);
+    font-variant-ligatures: none; /* people copy this text; keep it literal */
+  }
+  .copy {
+    background: transparent; color: var(--ink); border: 1px solid var(--ink);
+    border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 600;
+  }
+  .copy.done { border-color: #4f7a52; color: #4f7a52; }
+  .handoff code {
+    background: #f7f0e4; border: 1px solid var(--line); border-radius: 6px;
+    padding: 1px 6px; font-size: 12px; font-variant-ligatures: none;
+  }
+  a { color: inherit; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 14px; }
+  @keyframes pulse { 0%,100% { opacity: 0.45 } 50% { opacity: 0.9 } }
+  .working { animation: pulse 1.4s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<main>
+  <h1>One line, three voices, three prices.</h1>
+  <p class="sub">
+    Type a sentence. Grok, ElevenLabs and Deepgram each read it out loud, and you see
+    what every read actually cost. Under four cents for the set, from one prepaid
+    balance. No provider accounts.
+  </p>
+
+  <div class="label-row">
+    <label for="line">The line</label>
+    <span class="chars" id="chars"></span>
+  </div>
+  <textarea id="line">Your agent can already write the copy. Now it can read it out loud, score it, and hand you the finished cut.</textarea>
+
+  <div class="row">
+    <button id="go">Read it three ways</button>
+    <span class="total" id="total"></span>
+  </div>
+  <p class="hint">Each voice takes a couple of seconds. The prices differ by more than ten times.</p>
+
+  <div class="grid" id="grid"></div>
+  <p class="sample-note" id="sampleNote" hidden>
+    These are the blog post's recordings of the line above. No call was made and nothing
+    was charged. Press the button to record your own.
+  </p>
+
+  <section class="handoff">
+    <div class="handoff-head">
+      <h2>Or skip this page and ask your own agent</h2>
+      <button class="copy" id="copy">Copy prompt</button>
+    </div>
+    <pre id="prompt"></pre>
+    <p>
+      This page is standing in for your agent. Once yours is connected to TaskFuel it
+      makes the same three calls, in whatever you already work in.
+      <br />
+      Not connected yet? Ask your agent:
+      <code>Fetch https://app.taskfuel.ai/llms.txt and set taskfuel up for me.</code>
+    </p>
+  </section>
+
+  <dialog id="keyPrompt">
+    <h2>No API key yet</h2>
+    <p>
+      Replit's Agent asks for it and saves it for you. Get a key at
+      <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">app.taskfuel.ai</a>,
+      where the first $5 is free.
+    </p>
+    <button id="keyPromptClose" autofocus>Got it</button>
+  </dialog>
+
+  <footer>
+    Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices" target="_blank" rel="noopener">TaskFuel</a>.
+    Open it in Replit, add your own key, write your own line.
+  </footer>
+</main>
+
+<script>
+  const input = document.getElementById("line");
+  const charsEl = document.getElementById("chars");
+  const grid = document.getElementById("grid");
+  const go = document.getElementById("go");
+  const totalEl = document.getElementById("total");
+  const sampleNote = document.getElementById("sampleNote");
+  const keyPrompt = document.getElementById("keyPrompt");
+
+  let voices = [];
+  let maxChars = 200;
+  let hasKey = true; // assume yes until /api/config says otherwise
+  let spent = 0;
+
+  document.getElementById("keyPromptClose").onclick = () => keyPrompt.close();
+
+  const usd = (n) => "$" + n.toFixed(4).replace(/0{1,2}$/, "");
+
+  fetch("/api/config").then((r) => r.json()).then((cfg) => {
+    voices = cfg.voices;
+    maxChars = cfg.maxChars;
+    hasKey = cfg.hasKey;
+    syncChars();
+
+    // Nothing spent yet, so play what the blog post recorded for the default
+    // line. A real run replaces it.
+    const state = {};
+    for (const v of voices) state[v.id] = { audio: v.sample, cost: v.samplePrice, sample: true };
+    render(state);
+    sampleNote.hidden = false;
+  });
+
+  function syncChars() {
+    const n = input.value.trim().length;
+    charsEl.textContent = `${n} / ${maxChars}`;
+    charsEl.classList.toggle("over", n > maxChars);
+    go.disabled = n === 0 || n > maxChars;
+  }
+
+  function render(state) {
+    grid.innerHTML = "";
+    for (const v of voices) {
+      const s = state[v.id] || {};
+      const cell = document.createElement("div");
+      cell.className = "cell";
+
+      const head = document.createElement("div");
+      head.className = "head";
+      const who = document.createElement("div");
+      const name = document.createElement("div");
+      name.className = "name";
+      name.textContent = v.label;
+      const voice = document.createElement("div");
+      voice.className = "voice";
+      voice.textContent = "voice: " + v.voice;
+      who.append(name, voice);
+
+      const price = document.createElement("span");
+      price.className = "price";
+      if (s.sample) {
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = "sample";
+        price.append(tag, " ", usd(s.cost));
+      } else if (s.cost != null) {
+        price.textContent = usd(s.cost);
+      }
+      head.append(who, price);
+
+      const player = document.createElement("div");
+      if (s.audio) {
+        player.className = "player";
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.preload = "none";
+        audio.src = s.audio;
+        player.append(audio);
+      } else if (s.error) {
+        player.className = "player";
+        const p = document.createElement("span");
+        p.className = "err";
+        p.textContent = s.error;
+        player.append(p);
+      } else if (s.working) {
+        player.className = "player working";
+        player.textContent = "recording";
+      } else {
+        player.className = "player";
+        player.textContent = "waiting";
+      }
+
+      cell.append(head, player);
+      grid.append(cell);
+    }
+  }
+
+  const promptEl = document.getElementById("prompt");
+  const copyBtn = document.getElementById("copy");
+
+  const promptFor = (line) =>
+    "Using TaskFuel, read this line out loud in three different voices, each from a " +
+    `different text-to-speech provider:\n\n"${line || "..."}"\n\n` +
+    "Save each read as an MP3 so I can compare them, and show me what each one cost.";
+
+  const syncPrompt = () => { promptEl.textContent = promptFor(input.value.trim()); };
+  input.addEventListener("input", () => { syncChars(); syncPrompt(); });
+  syncPrompt();
+
+  copyBtn.onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(promptEl.textContent);
+      copyBtn.textContent = "Copied";
+      copyBtn.classList.add("done");
+      setTimeout(() => { copyBtn.textContent = "Copy prompt"; copyBtn.classList.remove("done"); }, 1600);
+    } catch {
+      // Clipboard access can be blocked. Select it so the keyboard still works.
+      const range = document.createRange();
+      range.selectNodeContents(promptEl);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+  };
+
+  go.addEventListener("click", async () => {
+    const text = input.value.trim();
+    if (!text || text.length > maxChars) return;
+
+    // Nothing to spend against, so say so here rather than letting the request
+    // come back as three errors in the cards.
+    if (!hasKey) return keyPrompt.showModal();
+
+    go.disabled = true;
+    sampleNote.hidden = true;
+    totalEl.className = "total working";
+    totalEl.textContent = "recording";
+    const state = {};
+    for (const v of voices) state[v.id] = { working: true };
+    render(state);
+
+    // All three at once. Each card fills in as its voice lands, and one engine
+    // failing leaves the other two alone.
+    await Promise.all(voices.map(async (v) => {
+      try {
+        const data = await readJson(await fetch("/api/speak", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ voice: v.id, text }),
+        }));
+        if (data.error) throw new Error(data.error);
+        state[v.id] = { audio: data.audio, cost: data.cost };
+        spent += data.cost || 0;
+      } catch (err) {
+        state[v.id] = { error: String(err.message || err) };
+      }
+      render(state);
+    }));
+
+    const line = Object.values(state).reduce((sum, s) => sum + (s.cost || 0), 0);
+    totalEl.className = "total";
+    totalEl.textContent = `${usd(line)} for this line · ${usd(spent)} this session`;
+    syncChars();
+  });
+
+  // The host's proxy can answer with an HTML error page instead of JSON.
+  // Say so in words rather than throwing "Unexpected token '<'".
+  async function readJson(res) {
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch {
+      throw new Error("server returned " + res.status + ", not JSON. Check the Console tab.");
+    }
+  }
+</script>
+</body>
+</html>
