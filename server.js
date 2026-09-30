@@ -68,7 +68,7 @@ const VOICES = [
 ];
 
 // What the page plays before anyone has spent anything: the blog post's own
-// recordings of the default line.
+// reads of the default line.
 const SAMPLE_BASE = "https://taskfuel.ai/audio/blog/audio-and-music-apis-for-ai-agents/";
 
 // Guardrails. The key can spend the whole balance and nobody is watching at

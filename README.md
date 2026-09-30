@@ -24,7 +24,7 @@ The point is not the cheapest voice. The most expensive one is not automatically
 the right one, and whether you want warm, brisk or authoritative is something
 you only find out by listening. Hearing all three costs less than four cents.
 
-Before you add a key, the page plays the three reads of that same line recorded
+Before you add a key, the page plays the three reads of that same line generated
 for the blog post, labelled as samples, so you can hear the difference first.
 
 ## Run it

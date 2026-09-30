@@ -173,8 +173,8 @@
 
   <div class="grid" id="grid"></div>
   <p class="sample-note" id="sampleNote" hidden>
-    These are the blog post's recordings of the line above. No call was made and nothing
-    was charged. Press <strong>Read it three ways</strong> to record your own.
+    These are the reads the blog post generated for the line above. No call was made and
+    nothing was charged. Press <strong>Read it three ways</strong> to generate your own.
   </p>
 
   <div class="next" id="next" hidden>
@@ -283,7 +283,7 @@
     hasKey = cfg.hasKey;
     syncChars();
 
-    // Nothing spent yet, so play what the blog post recorded for the default
+    // Nothing spent yet, so play what the blog post generated for the default
     // line. A real run replaces it.
     for (const v of voices) state[v.id] = { audio: v.sample, cost: v.samplePrice, sample: true };
     render();
@@ -343,7 +343,7 @@
         player.append(p);
       } else if (s.working) {
         player.className = "player working";
-        player.textContent = "recording";
+        player.textContent = "generating";
       } else {
         player.className = "player";
         player.textContent = "waiting";
@@ -412,7 +412,7 @@
     sampleNote.hidden = true;
     nextEl.hidden = true;
     totalEl.className = "total working";
-    totalEl.textContent = "recording";
+    totalEl.textContent = "generating";
     state = {};
     for (const v of voices) state[v.id] = { working: true };
     render();
