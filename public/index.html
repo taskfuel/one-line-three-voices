@@ -42,7 +42,6 @@
   }
   button:disabled { opacity: 0.45; cursor: not-allowed; }
   .total { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 14px; }
-  .hint { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
   .powered { font-size: 14px; margin: 14px 0 0; }
   .powered a { font-weight: 600; }
   .grid {
@@ -103,8 +102,7 @@
     margin-top: 40px; background: var(--card); border: 1px solid var(--line);
     border-radius: 12px; padding: 22px 24px; scroll-margin-top: 24px;
   }
-  .build h2 { font-size: 20px; margin: 0 0 6px; letter-spacing: -0.01em; }
-  .build .lede { margin: 0 0 18px; color: var(--muted); font-size: 15px; max-width: 62ch; }
+  .build h2 { font-size: 20px; margin: 0 0 12px; letter-spacing: -0.01em; }
   .steps { margin: 0 0 16px; padding-left: 20px; font-size: 15px; }
   .steps li + li { margin-top: 6px; }
   .prompt-head {
@@ -125,17 +123,11 @@
   }
   .copy.done { border-color: #4f7a52; color: #4f7a52; }
   .more { margin-top: 40px; }
-  .more h2 { font-size: 20px; margin: 0 0 6px; letter-spacing: -0.01em; }
-  .more .lede { margin: 0 0 16px; color: var(--muted); font-size: 15px; }
-  .more-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-  .more-card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
-    padding: 16px; display: flex; flex-direction: column; gap: 10px;
-  }
-  .more-card p { margin: 0; font-size: 14px; color: var(--muted); flex: 1; }
-  .more-card .name { white-space: normal; }
-  .more-card a { font-size: 14px; font-weight: 600; }
-  .more .all { margin: 16px 0 0; font-size: 14px; }
+  .more h2 { font-size: 20px; margin: 0 0 10px; letter-spacing: -0.01em; }
+  .more-list { margin: 0; padding-left: 20px; font-size: 15px; }
+  .more-list li + li { margin-top: 4px; }
+  .more-list a { font-weight: 600; }
+  .more .all { margin: 12px 0 0; font-size: 14px; font-weight: 600; }
   a { color: inherit; }
   @keyframes pulse { 0%,100% { opacity: 0.45 } 50% { opacity: 0.9 } }
   .working { animation: pulse 1.4s ease-in-out infinite; }
@@ -145,10 +137,8 @@
 <main>
   <h1>One line, three voices, three prices.</h1>
   <p class="sub">
-    Type a sentence. Grok, ElevenLabs and Deepgram each read it out loud, and you see
-    what every read actually cost. Doing that directly means three provider accounts,
-    three API keys and three bills. <strong>With your own TaskFuel account, you get one API key
-    with access to 2,000+ tools, without yet another subscription.</strong>
+    Type a line. Grok, ElevenLabs and Deepgram read it out loud, each with its price.
+    <strong>One TaskFuel key covers all three, plus 2,000+ other tools, with no subscription.</strong>
   </p>
 
   <div class="label-row">
@@ -163,19 +153,12 @@
   </div>
   <p class="powered">
     Powered by <a href="https://taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-powered" target="_blank" rel="noopener">TaskFuel</a>.
-    Import the app to your Replit account, add your own TaskFuel key, write your own line.
-  </p>
-  <p class="hint">
-    New TaskFuel accounts start with
-    <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-hint" target="_blank" rel="noopener">$5 free</a>,
-    about 130 runs of this app. Each voice takes a couple of seconds.
+    Import this app to Replit and add your own key. New accounts get
+    <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-hint" target="_blank" rel="noopener">$5 free</a>.
   </p>
 
   <div class="grid" id="grid"></div>
-  <p class="sample-note" id="sampleNote" hidden>
-    These are the reads the blog post generated for the line above. No call was made and
-    nothing was charged. Press <strong>Read it three ways</strong> to generate your own.
-  </p>
+  <p class="sample-note" id="sampleNote" hidden>Samples from the blog post. Nothing was charged.</p>
 
   <div class="next" id="next" hidden>
     <p id="nextText"></p>
@@ -184,17 +167,9 @@
 
   <section class="build" id="build">
     <h2>Add a voice to your own Replit app</h2>
-    <p class="lede">
-      Pick the voice you liked above. This prompt tells Replit Agent exactly how to call
-      it, so your app can read text out loud from your own TaskFuel balance.
-    </p>
     <ol class="steps">
-      <li>
-        Create a TaskFuel account at
-        <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-build" target="_blank" rel="noopener">app.taskfuel.ai</a>.
-        It starts with $5 free. Open <strong>API keys</strong> and create one.
-      </li>
-      <li>Open your own app in Replit and paste this into Replit Agent. Give it the key when it asks.</li>
+      <li>Get a key at <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-build" target="_blank" rel="noopener">app.taskfuel.ai</a>.</li>
+      <li>Paste this into Replit Agent in your own app.</li>
     </ol>
     <div class="prompt-head">
       <span id="promptFor"></span>
@@ -202,54 +177,27 @@
     </div>
     <pre id="prompt"></pre>
     <p class="other">
-      Using another agent, like Claude Code, Codex or Cursor? Ask it:
+      Other agent? Ask it:
       <code>Fetch https://app.taskfuel.ai/llms.txt and set taskfuel up for me.</code>
     </p>
   </section>
 
   <section class="more">
-    <h2>The same key pays for more than voices</h2>
-    <p class="lede">
-      One balance, over 100 providers, paid per call. Three more things we had an agent
-      do with it, written up with every prompt and every price:
-    </p>
-    <div class="more-grid">
-      <div class="more-card">
-        <span class="name">Let your agent be your video creator</span>
-        <p>A product image turned into a ten-second video clip, with the exact prompts and what each generation cost.</p>
-        <a href="https://taskfuel.ai/blog/let-your-agent-be-your-video-creator/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Read it</a>
-      </div>
-      <div class="more-card">
-        <span class="name">Your agent can build games. Now it can polish them</span>
-        <p>A plain Snake game given sprites, sound effects and music for $0.74. Play both versions.</p>
-        <a href="https://taskfuel.ai/blog/snake-game-assets-for-ai-agents/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Read it</a>
-      </div>
-      <div class="more-card">
-        <span class="name">Let your agent analyze X for you</span>
-        <p>Full X posts, long ones included, for half a cent a search. No X developer account.</p>
-        <a href="https://taskfuel.ai/blog/x-search-for-ai-agents/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Read it</a>
-        <a href="https://replit.com/github.com/taskfuel/one-search-twenty-x-posts" target="_blank" rel="noopener">Or import its Replit template</a>
-      </div>
-    </div>
-    <p class="all">
-      <a href="https://taskfuel.ai/tools/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-tools" target="_blank" rel="noopener">See everything your agent can call</a>:
-      search, market data, email, phone calls and more.
-    </p>
+    <h2>More from one key</h2>
+    <ul class="more-list">
+      <li><a href="https://taskfuel.ai/blog/let-your-agent-be-your-video-creator/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Video</a>: a product clip from one image.</li>
+      <li><a href="https://taskfuel.ai/blog/snake-game-assets-for-ai-agents/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">Games</a>: Snake with sprites and music for $0.74.</li>
+      <li><a href="https://taskfuel.ai/blog/x-search-for-ai-agents/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-blog" target="_blank" rel="noopener">X</a>: full posts for half a cent.</li>
+    </ul>
+    <p class="all"><a href="https://taskfuel.ai/tools/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-tools" target="_blank" rel="noopener">See all 2,000+ tools</a></p>
   </section>
 
   <dialog id="keyPrompt">
     <h2>No TaskFuel key yet</h2>
     <ol>
-      <li>
-        Create a free account at
-        <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-dialog" target="_blank" rel="noopener">app.taskfuel.ai</a>.
-        It starts with $5, about 130 runs of this app.
-      </li>
-      <li>Open <strong>API keys</strong> and create one.</li>
-      <li>
-        In Replit, add it as a secret named <code>TASKFUEL_API_KEY</code>, or ask Replit
-        Agent to do it. Then start the app again.
-      </li>
+      <li>Sign up at <a href="https://app.taskfuel.ai/?utm_source=replit&utm_medium=referral&utm_campaign=2026-09-replit-templates&utm_content=one-line-three-voices-dialog" target="_blank" rel="noopener">app.taskfuel.ai</a> ($5 free).</li>
+      <li>Create a key under <strong>API keys</strong>.</li>
+      <li>Add it in Replit as the secret <code>TASKFUEL_API_KEY</code>, then restart the app.</li>
     </ol>
     <button id="keyPromptClose" autofocus>Got it</button>
   </dialog>
@@ -353,7 +301,7 @@
       // one that ends up in your own app.
       const pick = document.createElement("button");
       pick.className = "pick";
-      pick.textContent = v.id === picked ? "In your app prompt" : "Use this voice in my app";
+      pick.textContent = v.id === picked ? "In the prompt" : "Use in my app";
       pick.onclick = () => { picked = v.id; render(); syncPrompt(); };
 
       cell.append(head, player, pick);
@@ -379,7 +327,7 @@
     const v = voices.find((x) => x.id === picked);
     if (!v) return;
     promptEl.textContent = buildPrompt(v);
-    promptFor.textContent = `For ${v.label}. Pick another voice above to change it.`;
+    promptFor.textContent = `${v.label} prompt. Pick another voice above.`;
   }
 
   input.addEventListener("input", syncChars);
@@ -442,7 +390,7 @@
     // Right after it works is when "put this in my own app" is worth asking.
     if (line > 0) {
       nextText.textContent =
-        `That line cost ${usd(line)} for all three. Pick the voice you liked, and one prompt puts it in your own Replit app.`;
+        `That cost ${usd(line)}. Want one of these voices in your app?`;
       nextEl.hidden = false;
     }
     syncChars();
